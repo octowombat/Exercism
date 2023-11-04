@@ -1,0 +1,18 @@
+# Apple
+.DS_Store
+# Exercism
+.exercism
+# Dart
+.dart_tool
+.packages
+*.snapshot
+incremental_kernel.*
+# Elixir
+/_build/
+/cover/
+/deps/
+/doc/
+/.fetch
+erl_crash.dump
+*.ez
+*-*.tar

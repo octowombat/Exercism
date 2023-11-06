@@ -183,7 +183,7 @@ defmodule VariableLengthQuantityTest do
   end
 
   describe "Decode a series of bytes, producing a series of integers." do
-    @tag :pending
+    # @tag :pending
     test "one byte" do
       encoded = <<0x7F>>
       output = VariableLengthQuantity.decode(encoded)
@@ -192,7 +192,7 @@ defmodule VariableLengthQuantityTest do
       assert output == expected
     end
 
-    @tag :pending
+    # @tag :pending
     test "two bytes" do
       encoded = <<0xC0, 0x0>>
       output = VariableLengthQuantity.decode(encoded)
@@ -201,7 +201,7 @@ defmodule VariableLengthQuantityTest do
       assert output == expected
     end
 
-    @tag :pending
+    # @tag :pending
     test "three bytes" do
       encoded = <<0xFF, 0xFF, 0x7F>>
       output = VariableLengthQuantity.decode(encoded)
@@ -210,7 +210,7 @@ defmodule VariableLengthQuantityTest do
       assert output == expected
     end
 
-    @tag :pending
+    # @tag :pending
     test "four bytes" do
       encoded = <<0x81, 0x80, 0x80, 0x0>>
       output = VariableLengthQuantity.decode(encoded)
@@ -219,7 +219,7 @@ defmodule VariableLengthQuantityTest do
       assert output == expected
     end
 
-    @tag :pending
+    # @tag :pending
     test "maximum 32-bit integer" do
       encoded = <<0x8F, 0xFF, 0xFF, 0xFF, 0x7F>>
       output = VariableLengthQuantity.decode(encoded)
@@ -228,7 +228,7 @@ defmodule VariableLengthQuantityTest do
       assert output == expected
     end
 
-    @tag :pending
+    # @tag :pending
     test "incomplete sequence causes error" do
       encoded = <<0xFF>>
       output = VariableLengthQuantity.decode(encoded)
@@ -237,7 +237,7 @@ defmodule VariableLengthQuantityTest do
       assert output == expected
     end
 
-    @tag :pending
+    # @tag :pending
     test "incomplete sequence causes error, even if value is zero" do
       encoded = <<0x80>>
       output = VariableLengthQuantity.decode(encoded)
@@ -246,7 +246,7 @@ defmodule VariableLengthQuantityTest do
       assert output == expected
     end
 
-    @tag :pending
+    # @tag :pending
     test "multiple values" do
       encoded = <<
         0xC0,

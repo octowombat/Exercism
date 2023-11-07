@@ -2,7 +2,9 @@ defmodule VariableLengthQuantity do
   @doc """
   Encode integers into a bitstring of VLQ encoded bytes
   """
-  @zeros List.duplicate(0, 7)
+  @zeros List.duplicate(0, 8)
+
+  import Bitwise
 
   @spec encode(integers :: [integer]) :: binary
   def encode(integers) do
@@ -43,6 +45,44 @@ defmodule VariableLengthQuantity do
   Decode a bitstring of VLQ encoded bytes into a series of integers
   """
   @spec decode(bytes :: binary) :: {:ok, [integer]} | {:error, String.t()}
-  def decode(_bytes) do
+  def decode(bytes) when is_binary(bytes) do
+    {remaining, result} =
+      for <<byte::size(8) <- bytes>>, reduce: {<<>>, []} do
+        {bin, list} ->
+          <<msb::size(1), _rest::size(7)>> = <<byte>>
+
+          bitstring = bin <> <<byte::size(8)>>
+
+          case msb do
+            1 ->
+              {bitstring, list}
+
+            0 ->
+              {:ok, answer} = decode_value(bitstring)
+              {<<>>, list ++ answer}
+          end
+      end
+
+    case remaining do
+      <<>> -> {:ok, result}
+      _ -> {:error, "incomplete sequence"}
+    end
+  end
+
+  defp decode_value(bytes) when is_binary(bytes) do
+    result =
+      for <<c::size(8) <- bytes>>, reduce: 0 do
+        acc ->
+          case c &&& 0x80 do
+            0 ->
+              acc <<< 7 ||| c
+
+            _ ->
+              v = c &&& 0x7F
+              acc <<< 7 ||| v
+          end
+      end
+
+    {:ok, [result]}
   end
 end
